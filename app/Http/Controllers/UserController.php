@@ -6,6 +6,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class UserController extends Controller
 {
@@ -70,26 +71,32 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        $update = User::where(['id' => $id])->update([
+
+        
+        $update = User::where(['id' => $request->id])->update([
             'name' => $request->name,
             'email' => $request->email,
             'telefone' => $request->telefone,
             'password' => bcrypt($request->password),
-            'id' =>$request->id
+            'id' => $request->id
         ]);
 
         if($update) {
-            return view('users');
+            return Redirect()->route('users.index');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $id)
     {
-        //
+        $delete = User::destroy($id->id);
+        //User::find($id)->delete();
+        if($delete) {
+            return Redirect()->route('users.index');
+        }
     }
 }

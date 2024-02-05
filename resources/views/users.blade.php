@@ -5,7 +5,14 @@
 
     <ul>
         @foreach ($data as $user)
-            <li> {{$user->name}} | <a href="{{route('users.edit', $user->id)}}">Editar</a> | <a href="">Delete</a> </li>    
+            <li> {{$user->name}} | <a href="{{route('users.edit', $user->id)}}">Editar</a> | 
+                <form action="{{route('users.destroy')}}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="id" value="{{$user->id}}">
+                    <button type="submit">Delete</button>
+                </form>
+                {{-- <a href="{{route('users.destroy', $user->id)}}"></a> </li>     --}}
         @endforeach
     </ul>
 
